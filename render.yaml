@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: layout-agent-server
+    runtime: node
+    runtimeVersion: 18
+    plan: free
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm run start"
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        scope: build
+      - key: PORT
+        value: "3001"
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        fromService:
+          name: layout-agent-client
+          property: url
+  
+  - type: web
+    name: layout-agent-client
+    runtime: node
+    runtimeVersion: 18
+    plan: free
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm run preview"
+    publishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: layout-agent-server
+          property: url
