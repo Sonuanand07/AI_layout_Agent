@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/api';
+// Set VITE_SERVER_URL when deploying (e.g. https://layout-agent-server-6a1m.onrender.com)
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
+const API_URL = `${SERVER_URL.replace(/\/+$/, '')}/api`;
 
 export async function sendChatMessage(message, layout, history) {
   try {
@@ -14,8 +16,7 @@ export async function sendChatMessage(message, layout, history) {
     });
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.error || 'Failed to send message to server'
-    );
+    throw new Error(error.response?.data?.error || 'Failed to send message to server');
   }
 }
+

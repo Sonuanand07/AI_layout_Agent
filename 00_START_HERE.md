@@ -46,9 +46,10 @@ Your **Layout Agent** project is fully implemented, documented, and ready for:
 # 1. Get API key from https://console.anthropic.com
 # 2. Run setup script:
 cd d:\layout-agent
-setup.bat
+.\setup.bat
 
 # 3. When prompted, edit server/.env and add your API key
+
 # 4. Start the app:
 npm run dev
 
