@@ -1,8 +1,12 @@
 import axios from 'axios';
 
-// Set VITE_SERVER_URL when deploying (e.g. https://layout-agent-server-6a1m.onrender.com)
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
-const API_URL = `${SERVER_URL.replace(/\/+$/, '')}/api`;
+// Configuration for API endpoint
+// In production (Render): Use relative path since frontend & backend are same domain
+// In development: Use localhost:3001
+const API_URL = 
+  import.meta.env.MODE === 'production' || typeof window === 'undefined'
+    ? '/api'
+    : `http://localhost:3001/api`;
 
 export async function sendChatMessage(message, layout, history) {
   try {
