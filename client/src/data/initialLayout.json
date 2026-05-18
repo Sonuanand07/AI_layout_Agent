@@ -377,9 +377,13 @@
       "parentId": "artboard_1778485662755_3"
     },
     "artboard_1778485662755_3": {
-      "x": -479.700399885017,
-      "y": -724.4991007769831,
+      "x": 0,
+      "y": 0,
       "id": "artboard_1778485662755_3",
+      "nx": 0,
+      "ny": 0,
+      "nw": 1,
+      "nh": 1,
       "data": {
         "preset": "instagram-post",
         "showLabel": true,
