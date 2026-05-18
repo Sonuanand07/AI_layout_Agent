@@ -1,6 +1,47 @@
 /**
  * JSON Validator - ensures LLM output has the expected structure
  */
+
+// Post-process layout to fix missing normalized coordinates
+// This is a safety net in case Claude forgets to include them
+export function ensureNormalizedCoordinates(layout) {
+  if (!layout || !layout.nodes) return layout;
+
+  // Find canvas dimensions from root node
+  const rootId = layout.rootNodes?.[0];
+  const artboard = rootId ? layout.nodes[rootId] : null;
+  const canvasWidth = artboard?.width || 1080;
+  const canvasHeight = artboard?.height || 1080;
+
+  // Fix all nodes
+  for (const [id, node] of Object.entries(layout.nodes)) {
+    if (!node) continue;
+
+    // If has absolute coords but missing normalized coords, calculate them
+    if (
+      typeof node.x === 'number' &&
+      typeof node.y === 'number' &&
+      typeof node.width === 'number' &&
+      typeof node.height === 'number'
+    ) {
+      if (typeof node.nx !== 'number') {
+        node.nx = node.x / canvasWidth;
+      }
+      if (typeof node.ny !== 'number') {
+        node.ny = node.y / canvasHeight;
+      }
+      if (typeof node.nw !== 'number') {
+        node.nw = node.width / canvasWidth;
+      }
+      if (typeof node.nh !== 'number') {
+        node.nh = node.height / canvasHeight;
+      }
+    }
+  }
+
+  return layout;
+}
+
 export function validateLayout(layout) {
   if (!layout) {
     throw new Error('Layout is null or undefined');

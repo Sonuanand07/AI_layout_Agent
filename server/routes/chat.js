@@ -1,7 +1,7 @@
 import express from 'express';
 import { callLLM } from '../services/llmService.js';
 import { buildSystemPrompt } from '../prompts/systemPrompt.js';
-import { validateLayout, validateChatResponse } from '../utils/jsonValidator.js';
+import { validateLayout, validateChatResponse, ensureNormalizedCoordinates } from '../utils/jsonValidator.js';
 import {
   resizeArtboard,
   moveNode,
@@ -44,6 +44,9 @@ router.post('/', async (req, res) => {
 
     // Validate the response structure
     validateChatResponse(llmResponse);
+
+    // Fix any missing normalized coordinates (safety net for LLM inconsistencies)
+    llmResponse.updatedLayout = ensureNormalizedCoordinates(llmResponse.updatedLayout);
 
     // Validate the updated layout
     validateLayout(llmResponse.updatedLayout);

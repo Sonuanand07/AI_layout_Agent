@@ -59,12 +59,38 @@ Return ONLY a valid JSON object with this exact structure:
   "updatedLayout": { ... full modified layout object ... }
 }
 
+CRITICAL - EVERY NODE MUST HAVE ALL THESE COORDINATE FIELDS:
+For EVERY node in updatedLayout.nodes:
+{
+  "id": "node_123",
+  "type": "text" or "image" or "shape",
+  "name": "Headline",
+  "x": 100,              // Absolute X in pixels
+  "y": 200,              // Absolute Y in pixels  
+  "width": 800,          // Absolute width in pixels
+  "height": 100,         // Absolute height in pixels
+  "nx": 0.093,           // Normalized X (divide x by canvasWidth)
+  "ny": 0.185,           // Normalized Y (divide y by canvasHeight)
+  "nw": 0.741,           // Normalized width (divide width by canvasWidth)
+  "nh": 0.093,           // Normalized height (divide height by canvasHeight)
+  "children": [],
+  "data": {...},
+  "style": {...}
+}
+
+Normalized coordinate formulas:
+- nx = x / canvasWidth
+- ny = y / canvasHeight  
+- nw = width / canvasWidth
+- nh = height / canvasHeight
+
 IMPORTANT: 
 - Return ONLY JSON - no markdown, no explanations outside the JSON
 - Explanation should be 1-2 sentences, friendly tone
-- Preserve all node IDs and data
-- Ensure all coordinates are valid numbers
+- Preserve all node IDs, data, and style from original
+- Ensure ALL nodes have x, y, width, height, nx, ny, nw, nh as valid numbers
 - Never remove elements, only modify properties
+- DO NOT FORGET normalized coordinates - they are mandatory for every node
 
 CURRENT LAYOUT:
 ${JSON.stringify(layout, null, 2)}
